@@ -13,3 +13,4 @@ This project is the submssion of Group 5 in Stutern's Inter-track Project
   (More to come)
 - Run 'npm install' to download all dependecies before running 'npm run start' to avoid errors
 - Run 'npm test' to make sure nothing is broken
+- The .env file will be shared in the Whatsapp group
