@@ -8,7 +8,7 @@ const port = process.env.PORT || 3001;
 dotenv.config();
 
 //DATABASE
-databaseConnection;
+// databaseConnection;
 
 //MIDDLEWARE
 app.use((req, res, next) => {
