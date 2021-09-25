@@ -2,13 +2,14 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const dotenv = require('dotenv');
-// const multer = require('multer');
+const authRoutes = require('./api/routes/auth.routes');
 const databaseConnection = require('./api/database/database.js');
 const port = process.env.PORT || 3001;
+
 dotenv.config();
 
 //DATABASE
-// databaseConnection;
+databaseConnection;
 
 //MIDDLEWARE
 app.use((req, res, next) => {
@@ -20,13 +21,15 @@ app.use(express.json());
 app.use(cors());
 
 //ROUTES
+app.use('/api/auth', authRoutes);
+
 if (process.env.NODE_ENV === 'production') {
   app.get('/', (req, res) => {
-    res.send('Production');
+    res.send('Loan app api: Production');
   });
 } else {
   app.get('/', (req, res) => {
-    res.send('Development');
+    res.send('Loan app api: Development');
   });
 }
 
