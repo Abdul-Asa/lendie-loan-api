@@ -80,4 +80,6 @@ describe('Testing the authentication routes', () => {
     const response = await request(app).post('/signup').send(data);
     expect(response.status).toBe(400);
   });
+
+  //Do login and verifyUser routes
 });
