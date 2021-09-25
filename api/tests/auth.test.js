@@ -9,10 +9,13 @@ dotenv.config();
 
 describe('Testing the authentication routes', () => {
   moongose
-    .connect(process.env.URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    })
+    .connect(
+      'mongodb+srv://boss:padrone@cluster0.u4etk.mongodb.net/Lendie?retryWrites=true&w=majority',
+      {
+        useNewUrlParser: true,
+        useUnifiedTopology: true,
+      }
+    )
     .then(() => {
       console.log('connected to db!');
       setTimeout(() => {
