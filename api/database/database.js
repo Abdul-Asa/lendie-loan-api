@@ -7,7 +7,7 @@ const databaseConnection = moongose
   .then(() => {
     console.log('connected to db!');
   })
-  .catch(() => {
+  .catch((err) => {
     console.log(err);
     databaseConnection.close();
   });

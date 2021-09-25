@@ -19,7 +19,7 @@ describe('Testing the authentication routes', () => {
         moongose.connection.close();
       }, '8000');
     })
-    .catch(() => {
+    .catch((err) => {
       console.log(err);
       moongose.connection.close();
     });
