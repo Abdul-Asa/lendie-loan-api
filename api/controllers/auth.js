@@ -99,7 +99,7 @@ const verifyUser = async (req, res, next) => {
     const existUser = await User.findOne({
       confirmationCode: req.params.confirmationCode,
     });
-    if (!existUser) return res.status(500).send({ message: 'User not found' });
+    if (!existUser) return res.send({ message: 'User not found' });
 
     //update status to active
     await User.updateOne(
