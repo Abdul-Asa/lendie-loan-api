@@ -9,7 +9,7 @@ const signupAction = async (req, res) => {
     //validation
     const { error } = signUpValidation(req.body);
     if (error) {
-      return res.status(400).send({
+      return res.send({
         err: error.details[0],
         message: error.details[0].message,
       });
@@ -41,12 +41,12 @@ const signupAction = async (req, res) => {
       url = `${req.protocol}://localhost:3001/api/auth/confirm/${confirmation}`;
     }
     sendConfirmationEmail(createdUser.firstName, createdUser.email, url);
-    res.status(200).send({ message: 'success', user: createdUser, link: url });
+    res.send({ message: 'success', user: createdUser, link: url });
   } catch (err) {
     if (err.code === 11000) {
-      res.status(500).send({ message: 'Email already exists' });
+      res.send({ message: 'Email already exists' });
     } else {
-      res.status(400).send({ err, message: err.message });
+      res.send({ err, message: err.message });
     }
   }
 };
@@ -56,7 +56,7 @@ const loginAction = async (req, res) => {
     //validation
     const { error } = loginValidation(req.body);
     if (error) {
-      return res.status(400).send({
+      return res.send({
         err: error.details[0],
         message: error.details[0].message,
       });
@@ -64,12 +64,11 @@ const loginAction = async (req, res) => {
 
     //if user exists
     const existUser = await User.findOne({ email: req.body.email });
-    if (!existUser)
-      return res.status(400).send({ message: 'Email is not found' });
+    if (!existUser) return res.send({ message: 'Email is not found' });
 
     //if user hasn't accepted confirmation code
     if (existUser.status != 'Active') {
-      return res.status(500).send({
+      return res.send({
         message: 'Pending Account. Please Verify Your Email!',
       });
     }
@@ -78,8 +77,7 @@ const loginAction = async (req, res) => {
       req.body.password,
       existUser.password
     );
-    if (!validPassword)
-      return res.status(400).send({ message: 'Password is wrong' });
+    if (!validPassword) return res.send({ message: 'Password is wrong' });
 
     //give token
     const token = jwt.sign(
@@ -89,10 +87,9 @@ const loginAction = async (req, res) => {
 
     res
       .header('token', token)
-      .status(200)
       .json({ message: 'success', token: token, id: existUser._id });
   } catch (err) {
-    res.status(400).send({ err, message: err.message });
+    res.send({ err, message: err.message });
   }
 };
 
@@ -119,9 +116,9 @@ const verifyUser = async (req, res, next) => {
     const check = await User.findOne({
       confirmationCode: req.params.confirmationCode,
     });
-    res.status(200).json({ message: 'success', user: check });
+    res.json({ message: 'success', user: check });
   } catch (err) {
-    res.status(400).send({ err, message: err.message });
+    res.send({ err, message: err.message });
   }
 };
 
