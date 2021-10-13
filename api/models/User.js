@@ -24,10 +24,19 @@ const userSchema = new mongoose.Schema(
       required: true,
       min: 8,
     },
-
+    gender: {
+      type: String,
+      enum: ['male', 'female', 'other', 'P/N'],
+      required: true,
+    },
+    dateOfBirth: {
+      type: Date,
+      required: true,
+    },
     phoneNumber: {
       type: String,
       trim: true,
+      required: true,
     },
     hasAgreed: {
       type: Boolean,

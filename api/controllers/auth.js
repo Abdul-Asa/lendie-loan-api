@@ -122,6 +122,8 @@ const verifyUser = async (req, res, next) => {
   }
 };
 
+//Resend code
+
 module.exports = {
   signupAction,
   loginAction,
