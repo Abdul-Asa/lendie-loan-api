@@ -9,7 +9,11 @@ const signUpValidation = (data) => {
     email: Joi.string().email().required(),
     gender: Joi.string().required(),
     dateOfBirth: Joi.date().required().min(3),
-    phoneNumber: Joi.number().required().min(10).max(10),
+    phoneNumber: joi
+      .string()
+      .length(10)
+      .pattern(/^[0-9]+$/)
+      .required(),
     password: Joi.string()
       .required()
       .min(8)
