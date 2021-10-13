@@ -6,7 +6,7 @@ const authRoutes = require('./api/routes/auth.routes');
 const userRoutes = require('./api/routes/user.routes');
 
 const databaseConnection = require('./api/database/database.js');
-const port = process.env.PORT || 3001;
+const port = process.env.PORT || 3000;
 
 dotenv.config();
 
