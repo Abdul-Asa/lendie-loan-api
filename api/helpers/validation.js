@@ -9,7 +9,7 @@ const signUpValidation = (data) => {
     email: Joi.string().email().required(),
     gender: Joi.string().required(),
     dateOfBirth: Joi.date().required().min(3),
-    phoneNumber: Joi.number().required(),
+    phoneNumber: Joi.number().required().min(10).max(10),
     password: Joi.string()
       .required()
       .min(8)
