@@ -3,12 +3,14 @@ const Joi = require('@hapi/joi');
 
 //sign up validation
 const signUpValidation = (data) => {
+  const now = Date.now();
+  const cutoffDate = new Date(now - 1000 * 60 * 60 * 24 * 365 * 21);
   const validationSchema = Joi.object({
     firstName: Joi.string().required().min(3),
     lastName: Joi.string().required().min(3),
     email: Joi.string().email().required(),
     gender: Joi.string().required(),
-    dateOfBirth: Joi.date().required().min(3),
+    dateOfBirth: Joi.date().max(cutoffDate).required(),
     phoneNumber: Joi.string()
       .length(10)
       .pattern(/^[0-9]+$/)
