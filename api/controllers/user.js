@@ -90,6 +90,25 @@ const updateSingleUserPassword = async (req, res) => {
   }
 };
 
+const updateProfilePic = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+    const existUser = await User.findOne({ _id: user_id });
+    if (!existUser) return res.send("User with id doesn't exist");
+
+    const image = req.file.path;
+
+    const updatedUser = await User.updateOne(
+      { _id: user_id },
+      { $set: { image: image } },
+      { $currentDate: { lastUpdated: true } }
+    );
+    res.json({ message: 'success', user: updatedUser });
+  } catch (err) {
+    return res.json({ message: err.message, error: err });
+  }
+};
+
 // const sendCustomerEmail = async (req, res) => {
 //   try {
 //     const { error } = contactValidation(req.body);
@@ -113,5 +132,6 @@ module.exports = {
   deleteSingleUser,
   updateSingleUser,
   updateSingleUserPassword,
+  updateProfilePic,
   // sendCustomerEmail,
 };
