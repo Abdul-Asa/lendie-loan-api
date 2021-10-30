@@ -57,19 +57,65 @@ const changePasswordValidation = (data) => {
   return validationSchema.validate(data);
 };
 
-const contactValidation = (data) => {
+const personalInfoValidation = (data) => {
   const validationSchema = Joi.object({
-    name: Joi.string().required().min(3),
-    email: Joi.string().email().required(),
-    message: Joi.string().required().min(8),
+    firstName: Joi.string().required().min(3),
+    lastName: Joi.string().required().min(3),
+    phoneNumber: Joi.string()
+      .length(10)
+      .pattern(/^[0-9]+$/)
+      .required(),
+    address: Joi.string().required(),
+    NIN: Joi.string()
+      .length(11)
+      .pattern(/^[0-9]+$/)
+      .required(),
+    BVN: Joi.string()
+      .length(11)
+      .pattern(/^[0-9]+$/)
+      .required(),
   });
 
   return validationSchema.validate(data);
 };
 
+const paymentInfoValidation = (data) => {
+  const validationSchema = Joi.object({
+    cardNumber: Joi.string()
+      .length(16)
+      .pattern(/^[0-9]+$/)
+      .required(),
+    cardHolder: Joi.string().required().min(3),
+    CVV: Joi.string()
+      .length(3)
+      .pattern(/^[0-9]+$/)
+      .required(),
+    expiryDate: Joi.string().required(),
+    accountNumber: Joi.string()
+      .length(10)
+      .pattern(/^[0-9]+$/)
+      .required(),
+    accountName: Joi.string().required().min(3),
+    bankName: Joi.string().required().min(3),
+  });
+
+  return validationSchema.validate(data);
+};
+
+// const contactValidation = (data) => {
+//   const validationSchema = Joi.object({
+//     name: Joi.string().required().min(3),
+//     email: Joi.string().email().required(),
+//     message: Joi.string().required().min(8),
+//   });
+
+//   return validationSchema.validate(data);
+// };
+
 module.exports = {
   signUpValidation,
   loginValidation,
   changePasswordValidation,
-  contactValidation,
+  paymentInfoValidation,
+  personalInfoValidation,
 };

@@ -5,12 +5,10 @@ const userSchema = new mongoose.Schema(
     firstName: {
       type: String,
       required: true,
-      trim: true,
     },
     lastName: {
       type: String,
       required: true,
-      trim: true,
     },
     email: {
       type: String,
@@ -53,9 +51,57 @@ const userSchema = new mongoose.Schema(
       enum: ['admin', 'user'],
       default: 'user',
     },
+    firstTimeUser: {
+      type: Boolean,
+      default: true,
+    },
+    saveCard: {
+      type: Boolean,
+      default: true,
+    },
+    saveDetails: {
+      type: Boolean,
+      default: true,
+    },
     confirmationCode: {
       type: String,
       unique: true,
+    },
+    address: {
+      type: String,
+    },
+    BVN: {
+      type: String,
+      trim: true,
+    },
+    NIN: {
+      type: String,
+      trim: true,
+    },
+    accountNumber: {
+      type: String,
+      trim: true,
+    },
+    accountName: {
+      type: String,
+    },
+    bankName: {
+      type: String,
+      trim: true,
+    },
+    cardNumber: {
+      type: String,
+      trim: true,
+    },
+    cardHolder: {
+      type: String,
+    },
+    CVV: {
+      type: String,
+      trim: true,
+    },
+    expiryDate: {
+      type: Date,
     },
     image: {
       type: String,

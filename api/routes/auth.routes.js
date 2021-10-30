@@ -12,4 +12,7 @@ router.post('/login', loginAction);
 
 router.get('/confirm/:confirmationCode', verifyUser);
 
+//forgot password
+//resend verification code
+
 module.exports = router;

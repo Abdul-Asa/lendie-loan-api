@@ -7,8 +7,9 @@ const {
   deleteSingleUser,
   updateSingleUser,
   updateSingleUserPassword,
+  updateSingleUserPayment,
   // sendCustomerEmail,
-  updateProfilePic
+  updateProfilePic,
 } = require('../controllers/user');
 
 router.get('/get-info/:id', userAuthentication, getSingleUser);
@@ -19,7 +20,11 @@ router.patch(
   userAuthentication,
   updateSingleUserPassword
 );
-// router.post('/send-email', sendCustomerEmail);
+router.patch(
+  '/update-payment/:id',
+  userAuthentication,
+  updateSingleUserPayment
+);
 router.patch(
   '/profile-pic/:id',
   profileParser.single('image'),

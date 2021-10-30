@@ -2,6 +2,8 @@ const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const {
   changePasswordValidation,
+  paymentInfoValidation,
+  personalInfoValidation,
   // contactValidation,
 } = require('../helpers/validation');
 // const { sendContactEmail } = require('../helpers/email');
@@ -34,6 +36,15 @@ const updateSingleUser = async (req, res) => {
     const user_id = req.params.id;
     const existUser = await User.findOne({ _id: user_id });
     if (!existUser) return res.send({ message: "User with id doesn't exist" });
+
+    const { error } = personalInfoValidation(req.body);
+    if (error) {
+      return res.send({
+        err: error.details[0],
+        message: error.details[0].message,
+      });
+    }
+
     const keyObj = Object.keys(req.body);
     const updatedFields = {};
     keyObj.map(async (index) => {
@@ -109,23 +120,44 @@ const updateProfilePic = async (req, res) => {
   }
 };
 
-// const sendCustomerEmail = async (req, res) => {
-//   try {
-//     const { error } = contactValidation(req.body);
-//     if (error) {
-//       return res.send({
-//         err: error.details[0],
-//         message: error.details[0].message,
-//       });
-//     }
-//     sendContactEmail(req.body.name, req.body.email, req.body.message);
-//     res.json({
-//       message: 'done',
-//     });
-//   } catch (err) {
-//     return res.json({ message: err.message, error: err });
-//   }
-// };
+const updateSingleUserPayment = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+    const existUser = await User.findOne({ _id: user_id });
+    if (!existUser) return res.send({ message: "User with id doesn't exist" });
+
+    const { error } = paymentInfoValidation(req.body);
+    if (error) {
+      return res.send({
+        err: error.details[0],
+        message: error.details[0].message,
+      });
+    }
+
+    const keyObj = Object.keys(req.body);
+    const updatedFields = {};
+    keyObj.map(async (index) => {
+      if (index === 'password') {
+        return res.json({ message: "Can't update password on this route" });
+      }
+      updatedFields[index] = req.body[index];
+    });
+
+    const updatedUser = await User.updateOne(
+      { _id: user_id },
+      { $set: updatedFields },
+      { $currentDate: { lastUpdated: true } }
+    );
+    const savedCard = await User.updateOne(
+      { _id: user_id },
+      { $set: { saveCard: true } },
+      { $currentDate: { lastUpdated: true } }
+    );
+    res.json({ message: 'success', user: savedCard });
+  } catch (err) {
+    return res.json({ message: err.message, error: err });
+  }
+};
 
 module.exports = {
   getSingleUser,
@@ -133,5 +165,5 @@ module.exports = {
   updateSingleUser,
   updateSingleUserPassword,
   updateProfilePic,
-  // sendCustomerEmail,
+  updateSingleUserPayment,
 };
