@@ -57,11 +57,11 @@ const userSchema = new mongoose.Schema(
     },
     saveCard: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     saveDetails: {
       type: Boolean,
-      default: true,
+      default: false,
     },
     confirmationCode: {
       type: String,
