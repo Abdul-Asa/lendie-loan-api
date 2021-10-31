@@ -74,6 +74,7 @@ const personalInfoValidation = (data) => {
       .length(11)
       .pattern(/^[0-9]+$/)
       .required(),
+    saveDetails: Joi.boolean(),
   });
 
   return validationSchema.validate(data);
