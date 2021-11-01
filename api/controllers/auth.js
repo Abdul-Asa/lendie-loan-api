@@ -1,6 +1,8 @@
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
+const Loan = require('../models/Loan');
+
 const { signUpValidation, loginValidation } = require('../helpers/validation');
 const { sendConfirmationEmail } = require('../helpers/node.mailer');
 
@@ -111,6 +113,14 @@ const verifyUser = async (req, res, next) => {
       },
       { $currentDate: { lastUpdated: true } }
     );
+
+    const existHistory = await Loan.findOne({ userId: existUser._id });
+    if (!existHistory) {
+      const loanHistory = new Loan({
+        userId: existUser._id,
+      });
+      await loanHistory.save();
+    }
 
     //show the new result
     const check = await User.findOne({

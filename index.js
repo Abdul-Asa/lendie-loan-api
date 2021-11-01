@@ -4,6 +4,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const authRoutes = require('./api/routes/auth.routes');
 const userRoutes = require('./api/routes/user.routes');
+const loanRoutes = require('./api/routes/loan.routes');
 
 const databaseConnection = require('./api/database/database.js');
 const port = process.env.PORT || 3000;
@@ -25,6 +26,7 @@ app.use(cors());
 //ROUTES
 app.use('/api/auth', authRoutes);
 app.use('/api/user', userRoutes);
+app.use('/api/loan', loanRoutes);
 
 if (process.env.NODE_ENV === 'production') {
   app.get('/', (req, res) => {

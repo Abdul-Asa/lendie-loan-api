@@ -103,6 +103,24 @@ const paymentInfoValidation = (data) => {
   return validationSchema.validate(data);
 };
 
+const requestLoanValidation = (data) => {
+  const validationSchema = Joi.object({
+    amount: Joi.number().required(),
+    time: Joi.number().required().max(12).min(1),
+    purpose: Joi.string().required(),
+  });
+
+  return validationSchema.validate(data);
+};
+
+const repayLoanValidation = (data) => {
+  const validationSchema = Joi.object({
+    amountRepaid: Joi.number().required(),
+    loanId: Joi.string().required(),
+  });
+
+  return validationSchema.validate(data);
+};
 // const contactValidation = (data) => {
 //   const validationSchema = Joi.object({
 //     name: Joi.string().required().min(3),
@@ -119,4 +137,6 @@ module.exports = {
   changePasswordValidation,
   paymentInfoValidation,
   personalInfoValidation,
+  requestLoanValidation,
+  repayLoanValidation,
 };
