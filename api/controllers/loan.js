@@ -42,14 +42,16 @@ const requestLoan = async (req, res) => {
 
     //Store it
     let numWeeks = req.body.time;
+    let day = new Date();
     let now = new Date();
     now.setDate(now.getDate() + numWeeks * 7);
-
+    day.setDate(day.getDate());
     const loanReq = {
       ...req.body,
       status: 'Pending',
       amountRepaid: 0,
       repaymentDate: now,
+      loanTaken: day,
       interest: req.body.amount * 0.025 * (req.body.time / 4),
       totalLoan:
         req.body.amount + req.body.amount * 0.025 * (req.body.time / 4),
