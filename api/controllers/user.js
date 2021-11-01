@@ -6,6 +6,7 @@ const {
   personalInfoValidation,
   // contactValidation,
 } = require('../helpers/validation');
+var luhn = require('luhn');
 // const { sendContactEmail } = require('../helpers/email');
 
 const getSingleUser = async (req, res) => {
@@ -134,6 +135,9 @@ const updateSingleUserPayment = async (req, res) => {
       });
     }
 
+    var is_valid = luhn.validate(req.body.cardNumber);
+    if (!is_valid) return res.send({ message: 'Card number is not valid' });
+
     const keyObj = Object.keys(req.body);
     const updatedFields = {};
     keyObj.map(async (index) => {
@@ -143,7 +147,7 @@ const updateSingleUserPayment = async (req, res) => {
       updatedFields[index] = req.body[index];
     });
 
-    const updatedUser = await User.updateOne(
+    await User.updateOne(
       { _id: user_id },
       { $set: updatedFields },
       { $currentDate: { lastUpdated: true } }
