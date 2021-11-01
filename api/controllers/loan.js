@@ -1,10 +1,19 @@
 const Loan = require('../models/Loan');
 const User = require('../models/User');
 // const bcrypt = require('bcryptjs');
+
 const {
   requestLoanValidation,
   repayLoanValidation,
 } = require('../helpers/validation');
+const dotenv = require('dotenv');
+dotenv.config();
+
+const { PAYSTACK_KEY } = process.env;
+var paystack = require('paystack')(PAYSTACK_KEY);
+
+const MySecretKey = PAYSTACK_KEY;
+
 // const { sendContactEmail } = require('../helpers/email');
 
 const requestLoan = async (req, res) => {
@@ -133,9 +142,32 @@ const repayLoan = async (req, res) => {
       return res.send({
         message: 'No active loans',
       });
+
     const amountPaid = req.body.amountRepaid;
     const amountPayable =
       existLoan.activeLoan.totalLoan - existLoan.activeLoan.amountRepaid;
+
+    paystack.customer
+      .create({
+        email: existUser.email,
+        first_name: existUser.firstName,
+        last_name: existUser.lastName,
+        key: 'pk_test_12e7967dde543c64a4ece37fb6908224279fe995', // Replace with your public key
+      })
+      .then((res) => {
+        console.log(res);
+      });
+    paystack.transaction
+      .initialize({
+        amount: amountPaid,
+        authorization_code: MySecretKey,
+        email: existUser.email,
+      })
+      .then((resp) => {
+        return res.send({
+          message: resp,
+        });
+      });
 
     if (amountPaid === amountPayable) {
       const loanInfo = {
@@ -151,12 +183,6 @@ const repayLoan = async (req, res) => {
             activeLoan: {},
           },
         },
-        { $currentDate: { lastUpdated: true } }
-      );
-
-      await User.updateOne(
-        { _id: user_id },
-        { $set: { firstTimeUser: false } },
         { $currentDate: { lastUpdated: true } }
       );
 
