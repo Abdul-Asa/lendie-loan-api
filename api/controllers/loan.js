@@ -48,7 +48,7 @@ const requestLoan = async (req, res) => {
     day.setDate(day.getDate());
     const loanReq = {
       ...req.body,
-      status: 'Pending',
+      status: 'Disbursed',
       amountRepaid: 0,
       repaymentDate: now,
       loanTaken: day,
@@ -187,7 +187,11 @@ const repayLoan = async (req, res) => {
         },
         { $currentDate: { lastUpdated: true } }
       );
-
+      await User.updateOne(
+        { _id: user_id },
+        { $set: { firstTimeUser: false } },
+        { $currentDate: { lastUpdated: true } }
+      );
       const activeLoan = await Loan.findOne({ userId: user_id });
       return res.send({
         message: 'Loan has been fully repaid',
