@@ -19,7 +19,7 @@ const signUpValidation = (data) => {
       .required()
       .min(8)
       .max(1024)
-      .pattern(new RegExp('^[a-zA-Z0-9]{3,1024}$')),
+      .pattern(new RegExp('^[a-zA-Z0-9!@#$%^&*]{3,1024}$')),
     confirmPassword: Joi.ref('password'),
     hasAgreed: Joi.boolean().required().invalid(false),
   });
