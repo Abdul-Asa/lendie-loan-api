@@ -34,7 +34,7 @@ const loginValidation = (data) => {
       .required()
       .min(8)
       .max(1024)
-      .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
+      .pattern(new RegExp('^[a-zA-Z0-9!@#$%^&*]{3,1024}$')),
   });
 
   return validationSchema.validate(data);
