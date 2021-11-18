@@ -3,7 +3,11 @@ const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const Loan = require('../models/Loan');
 
-const { signUpValidation, loginValidation } = require('../helpers/validation');
+const {
+  signUpValidation,
+  loginValidation,
+  resetPasswordValidation,
+} = require('../helpers/validation');
 const { sendConfirmationEmail } = require('../helpers/node.mailer');
 
 const signupAction = async (req, res) => {
@@ -132,10 +136,70 @@ const verifyUser = async (req, res, next) => {
   }
 };
 
-//Resend code
+const checkForgotPassword = async (req, res) => {
+  try {
+    //validation
+    const { email, dateOfBirth } = req.body;
+    if (!email || !dateOfBirth) {
+      return res.send({
+        message: 'Required field missing',
+      });
+    }
+    //if user exists
+    const existUser = await User.findOne({ email: req.body.email });
+    if (!existUser) return res.send({ message: 'Email is not found' });
+
+    //if user hasn't accepted confirmation code
+    let ode = new Date(existUser.dateOfBirth);
+    let ode2 = new Date(dateOfBirth);
+
+    // console.log(ode, ode2);
+    if (ode2.getTime() !== ode.getTime()) {
+      return res.send({
+        message:
+          'Date does not match to the date of birth associated with this account',
+      });
+    }
+
+    res.json({ message: 'success', id: existUser._id });
+  } catch (err) {
+    res.send({ err, message: err.message });
+  }
+};
+
+const resetPassword = async (req, res) => {
+  try {
+    const user_id = req.params.id;
+    const existUser = await User.findOne({ _id: user_id });
+    if (!existUser) return res.send({ message: "User with id doesn't exist" });
+    // const { oldPassword, newPassword } = req.body;
+
+    const { error } = resetPasswordValidation(req.body);
+    if (error) {
+      return res.send({
+        err: error.details[0],
+        message: error.details[0].message,
+      });
+    }
+    //Move this to validation file
+
+    const salt = await bcrypt.genSalt(10);
+    const hashPassword = await bcrypt.hash(req.body.password, salt);
+    const updatedUser = await User.updateOne(
+      { _id: user_id },
+      { $set: { password: hashPassword } },
+      { $currentDate: { lastUpdated: true } }
+    );
+    res.json({ message: 'success', user: updatedUser });
+  } catch (err) {
+    return res.json({ message: err.message, error: err });
+  }
+};
 
 module.exports = {
   signupAction,
   loginAction,
   verifyUser,
+  checkForgotPassword,
+  resetPassword,
 };

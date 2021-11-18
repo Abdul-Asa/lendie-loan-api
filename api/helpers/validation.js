@@ -121,15 +121,23 @@ const repayLoanValidation = (data) => {
 
   return validationSchema.validate(data);
 };
-// const contactValidation = (data) => {
-//   const validationSchema = Joi.object({
-//     name: Joi.string().required().min(3),
-//     email: Joi.string().email().required(),
-//     message: Joi.string().required().min(8),
-//   });
 
-//   return validationSchema.validate(data);
-// };
+const resetPasswordValidation = (data) => {
+  const validationSchema = Joi.object({
+    password: Joi.string()
+      .required()
+      .min(8)
+      .max(1024)
+      .pattern(new RegExp('^[a-zA-Z0-9]{3,1024}$')),
+    resetPassword: Joi.string()
+      .required()
+      .min(8)
+      .max(1024)
+      .pattern(new RegExp('^[a-zA-Z0-9]{3,1024}$')),
+  });
+
+  return validationSchema.validate(data);
+};
 
 module.exports = {
   signUpValidation,
@@ -139,4 +147,5 @@ module.exports = {
   personalInfoValidation,
   requestLoanValidation,
   repayLoanValidation,
+  resetPasswordValidation,
 };
