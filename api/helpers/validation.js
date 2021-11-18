@@ -129,11 +129,7 @@ const resetPasswordValidation = (data) => {
       .min(8)
       .max(1024)
       .pattern(new RegExp('^[a-zA-Z0-9]{3,1024}$')),
-    resetPassword: Joi.string()
-      .required()
-      .min(8)
-      .max(1024)
-      .pattern(new RegExp('^[a-zA-Z0-9]{3,1024}$')),
+    resetPassword: Joi.ref('password'),
   });
 
   return validationSchema.validate(data);
